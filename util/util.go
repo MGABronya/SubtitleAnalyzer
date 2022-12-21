@@ -6,6 +6,7 @@ package util
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -130,5 +131,47 @@ func Time(line string) (time int, err error) {
 	// TODO 计算出时间
 	time = hour*60*60*1000 + minute*60*1000 + second*1000 + msecond
 
+	return
+}
+
+// @title    Time
+// @description   尝试将时间翻译为字符串
+// @auth      MGAronya（张健）             2022-9-16 10:29
+// @param     time		需要翻译的时间
+// @return    str string		str为时间字符串
+func TimeToString(time int) (str string) {
+
+	// TODO 计算毫秒
+	ms := fmt.Sprint(time % 1000)
+	// TODO 补零
+	for len(ms) < 3 {
+		ms = "0" + ms
+	}
+	time /= 1000
+
+	// TODO 计算秒
+	s := fmt.Sprint(time % 60)
+	// TODO 补零
+	for len(s) < 2 {
+		s = "0" + s
+	}
+	time /= 60
+
+	// TODO 计算分钟
+	m := fmt.Sprint(time % 60)
+	// TODO 补零
+	for len(m) < 2 {
+		m = "0" + m
+	}
+	time /= 60
+
+	// TODO 计算小时
+	h := fmt.Sprint(time)
+	// TODO 补零
+	for len(h) < 2 {
+		h = "0" + h
+	}
+
+	str = h + ":" + m + ":" + s + "," + ms
 	return
 }

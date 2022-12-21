@@ -6,7 +6,7 @@ package model
 
 // Subtitle			定义字幕
 type Subtitle struct {
-	Id        int    `json:"id"`         // 用户Id
+	Id        int    `json:"id"`         // 字幕Id
 	StartTime int    `json:"start_time"` // 起始时间
 	EndTime   int    `json:"end_time"`   // 终止时间
 	Content   string `json:"content"`    // 内容

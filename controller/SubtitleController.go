@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"os"
 	"sort"
 	"strconv"
 
@@ -168,4 +169,52 @@ func Upload(ctx *gin.Context) {
 
 	// TODO 成功
 	response.Success(ctx, gin.H{"subtitles": subtitles, "errors": errors, "warnings": warnings}, "分析字幕成功")
+}
+
+// @title    Download
+// @description   下载字幕文件
+// @auth      MGAronya（张健）       2022-9-16 12:15
+// @param    ctx *gin.Context       接收一个上下文
+// @return   void
+func Download(ctx *gin.Context) {
+	var subtitles []model.Subtitle
+	// TODO 数据验证
+	if err := ctx.ShouldBind(&subtitles); err != nil {
+		log.Print(err.Error())
+		response.Fail(ctx, nil, "数据验证错误")
+		return
+	}
+
+	// TODO 创建文件
+	fp, err := os.Create("./demo.srt")
+
+	// TODO 查看错误情况
+	if err != nil {
+		log.Print(err.Error())
+		response.Fail(ctx, nil, "系统错误，创建文件失败")
+		return
+	}
+
+	defer fp.Close()
+
+	// TODO 解析subtitles
+	sub := ""
+	for i := range subtitles {
+		sub += fmt.Sprint(subtitles[i].Id) + "\n"
+		sub += util.TimeToString(subtitles[i].StartTime) + " --> " + util.TimeToString(subtitles[i].EndTime) + "\n"
+		sub += subtitles[i].Content + "\n"
+	}
+
+	// TODO 尝试写入文件
+	_, err = fp.WriteString(sub)
+
+	// TODO 写入文件失败
+	if err != nil {
+		log.Print(err.Error())
+		response.Fail(ctx, nil, "系统错误，写入文件失败")
+		return
+	}
+
+	// TODO 返回文件
+	ctx.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", fp.Name()))
 }

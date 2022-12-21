@@ -23,5 +23,8 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	// TODO 用户上传自己的字幕文件
 	r.POST("/upload", controller.Upload)
 
+	// TODO 用户下载自己的字幕文件
+	r.POST("/download", controller.Download)
+
 	return r
 }
