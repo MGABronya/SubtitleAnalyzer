@@ -128,6 +128,8 @@ func Upload(ctx *gin.Context) {
 				if line == "" {
 					// TODO 为损坏数据，则不压入数组
 					if subtitle.Id < 0 {
+						// TODO 控制状态转移
+						state = 0
 						continue
 					}
 					// TODO 将subtitle压入数组
@@ -217,4 +219,5 @@ func Download(ctx *gin.Context) {
 
 	// TODO 返回文件
 	ctx.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", fp.Name()))
+	ctx.File(fp.Name())
 }
